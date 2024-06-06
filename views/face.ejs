@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>AIDitor</title>
+    <link rel="stylesheet" href="./stylesheets/style.css" />
+    <script src="./javascripts/popup.js"></script>
+</head>
+<body>
+    <div class="container">
+        <div class="sidebar">
+            <div class="logo">
+                <a href="/"><img src="./images/mainlogo.png" alt="icon" style="height: 40px" /></a>
+            </div>
+            <ul>
+                <li>
+                    <a href="/"><img src="./images/main.png" alt="icon" class="menu-icon" /> Main</a>
+                </li>
+                <li>
+                    <a href="#editor"><img src="./images/editor.png" alt="icon" class="menu-icon" /> Additor</a>
+                    <ul class="submenu">
+                        <li><a href="/moderation">Moderation</a></li>
+                        <li><a href="#label-mosaic">Label Mosaic</a></li>
+                        <li><a href="/face">Face Extraction</a></li>
+                    </ul>
+                </li>
+                <li>
+                    <a href="#user"><img src="./images/user.png" alt="icon" class="menu-icon" /> User</a>
+                </li>
+            </ul>
+            <div class="account">
+                <h3>Account</h3>
+                <ul>
+                    <li>
+                        <a href="#settings"><img src="./images/setting.png" alt="icon" class="menu-icon" /> Settings</a>
+                    </li>
+                    <li>
+                        <a href="#logout"><img src="./images/logout.png" alt="icon" class="menu-icon" /> Logout</a>
+                    </li>
+                </ul>
+            </div>
+            <div class="developer">
+                <p>Developer:</p>
+                <p>+jiwon0310@gmail.com</p>
+                <p>+juyeon0310@naver.com</p>
+            </div>
+        </div>
+        <div class="main">
+            <div class="header user-card">
+                <h2>Hi User Name!</h2>
+                <div class="user-info">
+                    <span>User Name</span>
+                    <img src="./images/profile.png" alt="User Profile" width="40" height="40" />
+                </div>
+            </div>
+            <div class="content">
+                <h3 class="subtitle">Face Extraction</h3>
+                <hr />
+                <div class="requestform" id="moderation">
+                    <img src="./images/upload.png" alt="Upload video" />
+                    <div class="form-content">
+                        <h3>Face Extraction Request</h3>
+                        <form action="/face_con" method="get">
+                            <br />
+                            <div>
+                                <label for="videoFile">Video File</label>
+                                <input
+                                    type="text"
+                                    id="videoFile"
+                                    name="videoFile"
+                                    onclick="openPopup()"
+                                    value="파일을 선택해주세요."
+                                    style="color: darkgray"
+                                    onfocus="handleFocus(event)"
+                                    onblur="handleBlur(event)"
+                                    readonly
+                                />
+                            </div>
+                            <br />
+                            <div>
+                                <label for="editType">Edit Type</label>
+                                <input type="text" id="editType" name="editType" value="Face Extraction" readonly />
+                            </div>
+                            <br />
+                            <div>
+                                <label for="newVideoName">Name new video</label>
+                                <input
+                                    type="text"
+                                    id="newVideoName"
+                                    name="newVideoName"
+                                    value="new_video.mp4"
+                                    style="color: darkgray"
+                                    onfocus="handleFocus(event)"
+                                    onblur="handleBlur(event)"
+                                />
+                            </div>
+                            <div>
+                                <label for="confirming">
+                                    <h4>Confirming</h4>
+                                    <input class="tgl tgl-light" id="cb1" type="checkbox" />
+                                    <label class="tgl-btn" for="cb1"></label>
+                                    <span id="toggle-text">No thanks</span>
+                                </label>
+                            </div>
+                            <button type="submit" class="request-btn">Let AIDitor make new video</button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <script>
+        window.addEventListener('message', function (event) {
+            if (event.data.type === 'file-uploaded') {
+                document.getElementById('videoFile').value = event.data.fileName;
+            }
+        });
+
+        function handleFocus(event) {
+            if (event.target.value === '파일을 선택해주세요.' || event.target.value === 'new_video.mp4') {
+                event.target.style.color = 'black';
+                event.target.value = '';
+            }
+        }
+
+        function handleBlur(event) {
+            if (event.target.value === '') {
+                event.target.style.color = 'darkgray';
+                event.target.value = event.target.id === 'videoFile' ? '파일을 선택해주세요.' : 'new_video.mp4';
+            }
+        }
+
+        document.getElementById('cb1').addEventListener('change', function () {
+            var toggleText = document.getElementById('toggle-text');
+            if (this.checked) {
+                toggleText.textContent = 'I will check my video before saving';
+            } else {
+                toggleText.textContent = 'No thanks';
+            }
+        });
+
+        function openPopup() {
+            window.open('/pop_upload', 'popUploadWindow', 'width=600,height=400');
+        }
+    </script>
+</body>
+</html>
