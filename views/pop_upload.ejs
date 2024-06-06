@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Video Upload Popup</title>
+    <link rel="stylesheet" href="./stylesheets/pop.css" />
+</head>
+<body>
+    <div class="popup-overlay"></div>
+    <div class="popup">
+        <button class="popup-close" onclick="window.close()">×</button>
+        <div class="popup-content">
+            <img src="./images/folder.png" alt="Folder" class="folder-icon" />
+            <h2>Select Your Video File</h2>
+            <form id="upload-form" action="/upload" method="post" enctype="multipart/form-data">
+                <div class="file-upload-wrapper">
+                    <label for="video-file" class="custom-file-upload">Select File</label>
+                    <input type="file" id="video-file" name="videoFile" accept="video/*" onchange="displayFileName()" />
+                    <input type="text" id="file-name" class="file-name" value="filename.mp4" readonly />
+                </div>
+                <button type="button" onclick="submitFile()" class="submit-btn">SUBMIT</button>
+            </form>
+        </div>
+    </div>
+
+    <script>
+        function displayFileName() {
+            var input = document.getElementById('video-file');
+            if (input.files.length > 0) {
+                var fileName = input.files[0].name;
+                document.getElementById('file-name').value = fileName;
+            }
+        }
+
+        async function submitFile() {
+            const form = document.getElementById('upload-form');
+            const formData = new FormData(form);
+
+            try {
+                const response = await fetch('/upload', {
+                    method: 'POST',
+                    body: formData,
+                });
+
+                const result = await response.json();
+                if (response.ok) {
+                    alert('File uploaded successfully!');
+                    window.opener.postMessage({ type: 'file-uploaded', fileName: result.data.Key.replace('rawvideo/', '') }, '*');
+                    window.close();
+                } else {
+                    alert('Error uploading file: ' + result.message);
+                }
+            } catch (error) {
+                console.error('Error uploading file:', error);
+                alert('Error uploading file');
+            }
+        }
+    </script>
+</body>
+</html>

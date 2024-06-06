@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>AIDitor</title>
+    <link rel="stylesheet" href="./stylesheets/style.css" />
+    <script src="./javascripts/popup.js"></script>
+</head>
+<body>
+    <div class="container">
+        <div class="sidebar">
+            <div class="logo">
+                <a href="/"><img src="./images/mainlogo.png" alt="icon" style="height: 40px" /></a>
+            </div>
+            <ul>
+                <li>
+                    <a href="/"><img src="./images/main.png" alt="icon" class="menu-icon" /> Main</a>
+                </li>
+                <li>
+                    <a href="#editor"><img src="./images/editor.png" alt="icon" class="menu-icon" /> Additor</a>
+                    <ul class="submenu">
+                        <li><a href="/moderation">Moderation</a></li>
+                        <li><a href="#label-mosaic">Label Mosaic</a></li>
+                        <li><a href="/face">Face Extraction</a></li>
+                    </ul>
+                </li>
+                <li>
+                    <a href="#user"><img src="./images/user.png" alt="icon" class="menu-icon" /> User</a>
+                </li>
+            </ul>
+            <div class="account">
+                <h3>Account</h3>
+                <ul>
+                    <li>
+                        <a href="#settings"><img src="./images/setting.png" alt="icon" class="menu-icon" /> Settings</a>
+                    </li>
+                    <li>
+                        <a href="#logout"><img src="./images/logout.png" alt="icon" class="menu-icon" /> Logout</a>
+                    </li>
+                </ul>
+            </div>
+            <div class="developer">
+                <p>Developer:</p>
+                <p>+jiwon0310@gmail.com</p>
+                <p>+juyeon0310@naver.com</p>
+            </div>
+        </div>
+        <div class="main">
+            <div class="header user-card">
+                <h2>Hi User Name!</h2>
+                <div class="user-info">
+                    <span>User Name</span>
+                    <img src="./images/profile.png" alt="User Profile" width="40" height="40" />
+                </div>
+            </div>
+            <div class="content">
+                <h3 class="subtitle">Face Extraction</h3>
+                <hr />
+                <div class="moderation">
+                    <div class="icon">
+                        <img src="images/logo-sad.png" alt="Moderation Icon">
+                    </div>
+                    <h2>Please Check...</h2>
+                    <p class="video-url">
+                        <a href="<%= videoName ? `https://s3.${process.env.AWS_REGION}.amazonaws.com/${process.env.AWS_BUCKET_NAME}/rawvideo/${videoName}` : '#' %>">
+                            <%= videoName ? videoName : 'mode_video.url' %>
+                        </a>
+                    </p>
+                    <div class="timeline">
+                        <img src="images/output_timeline.png" alt="Timeline" style="width: 60%;">
+                    </div>
+                    <div class="description" id="description">
+                        I caught two parts for moderation in your video, but I only caught the sound for one part.
+                        Can you confirm the part at 2:30 in the video and request re-editing or saving?
+                    </div>
+                    <div class="buttons">
+                        <a href="/face_complete?videoName=<%= videoName %>" class="btn btn-save">Let's save!</a>
+                        <a href="/face" class="btn btn-edit">Please re-edit.</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>
