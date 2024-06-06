@@ -1,39 +1,10 @@
 # .env
 .env
 
-## java
-**/*.class
-
-## scala
-scala/**/project
-scala/**/target
-
-## maven
-maven/**/target
-
 ## nodejs
 **/node_modules
 **/package-lock.json
-**/package.json
 conf/*
-
-## python venv 
-python/**/.venv
-python/**/__pycache__/
-python/secret.json
-python/**/imsi*
-python/**/somefolder*
-python/**/work
-
-## oracle
-oracle/node/dbConfig.js
-oracle/node/node_modules
-oracle/node/package-lock.json
-oracle/**/myterror.csv
-
-## .c9
-.c9/
-**/uploadedFiles
 
 ## source
 **/*.png
