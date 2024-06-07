@@ -10,25 +10,32 @@ require('dotenv').config();
 
 // AWS S3 클라이언트 설정
 const s3Client = new S3Client({
-  region: process.env.AWS_REGION,
+  region: process.env.REGION_S,
   credentials: {
-    accessKeyId: process.env.AWS_ACCESS_KEY_ID,
-    secretAccessKey: process.env.AWS_SECRET_ACCESS_KEY,
+    accessKeyId: process.env.ID_S,
+    secretAccessKey: process.env.SECRET_S,
   }
 });
 
 // Multer 설정
 const upload = multer({ dest: 'uploads/' });
 
+let NODE_MAIN;
+
+app.use(function (req, res, next) {
+  NODE_MAIN = "http://" + req.get("host").replace("8500", "8000");
+  next();
+});
+
 app.set('view engine', 'ejs');
 app.use(express.static(path.join(__dirname, 'public')));
 
 app.get('/', (req, res) => {
-  res.render('index');
+  res.render('index', {NODE_MAIN:NODE_MAIN});
 });
 
 app.get('/face', (req, res) => {
-  res.render('face');
+  res.render('face', {NODE_MAIN:NODE_MAIN});
 });
 
 app.get('/pop_upload', (req, res) => {
@@ -37,7 +44,7 @@ app.get('/pop_upload', (req, res) => {
 
 app.get('/face_con', async (req, res) => {
   const params = {
-    Bucket: process.env.AWS_BUCKET_NAME,
+    Bucket: process.env.BUCKET_NAME_S,
     Prefix: 'rawvideo/',
   };
 
@@ -61,13 +68,13 @@ app.get('/face_con', async (req, res) => {
 
 app.get('/face_complete', (req, res) => {
   const { videoName } = req.query;
-  res.render('face_complete', { videoName });
+  res.render('face_complete', { videoName , NODE_MAIN:NODE_MAIN});
 });
 
 app.get('/download', async (req, res) => {
   const { fileName } = req.query;
   const params = {
-    Bucket: process.env.AWS_BUCKET_NAME,
+    Bucket: process.env.BUCKET_NAME_S,
     Key: `rawvideo/${fileName}`
   };
 
@@ -90,7 +97,7 @@ app.get('/download', async (req, res) => {
 
 app.get('/list_videos', async (req, res) => {
   const params = {
-    Bucket: process.env.AWS_BUCKET_NAME,
+    Bucket: process.env.BUCKET_NAME_S,
     Prefix: 'rawvideo/',
   };
 
@@ -110,7 +117,7 @@ app.get('/list_videos', async (req, res) => {
 app.post('/upload', upload.single('videoFile'), async (req, res) => {
   const fileContent = fs.readFileSync(req.file.path);
   const params = {
-    Bucket: process.env.AWS_BUCKET_NAME,
+    Bucket: process.env.BUCKET_NAME_S,
     Key: `rawvideo/${req.file.originalname}`,
     Body: fileContent,
     ContentType: req.file.mimetype

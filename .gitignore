@@ -8,3 +8,5 @@ conf/*
 
 ## source
 **/*.mp4
+
+uploads/*
