@@ -63,7 +63,7 @@
                     </div>
                     <h2>Please Check...</h2>
                     <p class="video-url">
-                        <a href="<%= videoName ? `https://s3.${process.env.AWS_REGION}.amazonaws.com/${process.env.AWS_BUCKET_NAME}/rawvideo/${videoName}` : '#' %>">
+                        <a href="<%= videoName ? `https://s3.${process.env.REGION_S}.amazonaws.com/${process.env.BUCKET_NAME_S}/rawvideo/${videoName}` : '#' %>">
                             <%= videoName ? videoName : 'mode_video.url' %>
                         </a>
                     </p>
